@@ -4,125 +4,77 @@
 
 ---
 
-## 1. Prérequis
+## 1. Comprendre où est ton projet
 
-- VS Code + extension **Cline** (ou équivalent type Continue.dev configuré avec DeepSeek V4 Pro)
-- Docker Desktop installé et lancé
-- Git clone du repo
-- Clé API DeepSeek (gratuite ou payante selon usage)
+**Le dossier `ProspectionCockpit` que tu clones depuis GitHub EST ton projet.**
 
----
+Tu ne dois **pas** mettre les dossiers `.loop/`, `.clinerules/`, `skills/` etc. dans un autre projet existant.
 
-## 2. Configuration Unique de Cline (5 minutes)
+Tu travailles **directement dedans** :
 
-C'est l'étape la plus importante.
-
-### Option A (Recommandée) - Custom Instructions
-
-1. Ouvre VS Code
-2. Va dans les paramètres de **Cline** (icône Cline dans la barre latérale ou Command Palette > Cline: Open Settings)
-3. Colle **tout le contenu** du fichier :
-   ```
-   loop-prompts/cline-integration.md
-   ```
-   dans le champ **Custom Instructions** / **System Prompt**.
-
-### Option B - Fichier .cline/instructions.md
-
-Crée un fichier `.cline/instructions.md` à la racine du projet et colle le même texte dedans. Cline le lit souvent automatiquement.
-
-**Une fois fait**, DeepSeek V4 Pro saura **automatiquement** qu'il doit suivre le Loop Engineering à chaque fois.
-
----
-
-## 3. Comment Lancer une Tâche (Workflow Quotidien)
-
-**NE JAMAIS** commencer à coder directement.
-
-### Étape par étape :
-
-1. Ouvre Cline dans VS Code sur le dossier `ProspectionCockpit`
-2. Dans la fenêtre de chat Cline, écris **exactement** ceci au début de ton prompt :
-
-```text
-Exécute en mode Loop Engineering strict (L2). Tâche : [Description claire et précise de ce que tu veux faire]
-
-Lis d'abord complètement .loop/LOOP.md, .loop/STATE.md, skills/rules.md et skills/project-context.md.
+```
+ProspectionCockpit/          ← C'est la racine de ton projet
+├── .clinerules/             ← Règles Cline (lu automatiquement)
+├── .loop/                    ← Loop Engineering
+├── skills/                  ← Règles + Contexte
+├── src/                     ← Code source (que tu vas créer)
+├── docker-compose.yml
+├── pyproject.toml
+├── README.md
+└── ...
 ```
 
-3. Appuie sur Entrée.
+---
 
-Cline / DeepSeek va alors :
-- Lire les fichiers mémoire
-- Suivre les **5 phases** (ANALYSE → PLANIFICATION → APPLICATION → TEST → AMÉLIORATION)
-- Te proposer les modifications de code
-- **Mettre à jour automatiquement** `.loop/STATE.md` à la fin
+## 2. Prérequis
+
+- VS Code + extension **Cline**
+- Docker Desktop
+- Git
 
 ---
 
-## 4. Exemple Concret de Premier Prompt
+## 3. Configuration Cline (la bonne façon)
+
+Cline lit automatiquement les règles depuis le dossier `.clinerules/`.
+
+Tu n'as **presque rien à faire** :
+
+1. Clone ce repo
+2. Ouvre le dossier `ProspectionCockpit` dans VS Code
+3. Redémarre VS Code (ou recharge la fenêtre)
+4. Cline devrait détecter automatiquement `.clinerules/loop-engineering.md`
+
+C'est tout. Les règles Loop Engineering sont maintenant actives à chaque prompt.
+
+---
+
+## 4. Comment lancer une tâche
+
+Commence toujours tes prompts dans Cline par :
 
 ```text
-Exécute en mode Loop Engineering strict (L2). Tâche : Ajouter Alembic + configuration SQLModel engine dans le lifespan de FastAPI et créer la première migration.
+Exécute en mode Loop Engineering strict (L2). Tâche : [Ce que tu veux faire]
 
-Lis d'abord complètement .loop/LOOP.md, .loop/STATE.md, skills/rules.md et skills/project-context.md.
+Lis d'abord complètement .loop/LOOP.md, .loop/STATE.md, skills/rules.md...
 ```
-
-Cline va alors produire une boucle complète L2 structurée.
 
 ---
 
-## 5. Lancer le Projet en Local (Test Immédiat)
+## 5. Lancer le projet en local
 
 ```bash
-# 1. Clone ou pull le repo
-cd ProspectionCockpit
-
-# 2. Crée ton fichier .env
-cp .env.example .env
-
-# 3. (Optionnel) Ajoute ta clé DeepSeek dans .env
-# DEEPSEEK_API_KEY=sk-...
-
-# 4. Lance tout
 docker compose up --build
-
-# 5. Teste
-curl http://localhost:8000/health
-# ou ouvre http://localhost:8000/docs
 ```
 
-Tu devrais voir :
-```json
-{
-  "status": "healthy",
-  "version": "0.1.0",
-  "message": "ProspectionCockpit API is running (Loop Engineering mode)"
-}
-```
+Puis va sur `http://localhost:8000/docs`
 
 ---
 
-## 6. Règles d'Or à Respecter
+## 6. Règles d'Or
 
-- **Toujours** commencer par "Exécute en mode Loop Engineering strict (L2)..."
-- **Jamais** demander à Cline de "juste faire le code" sans la boucle.
-- À la fin de chaque tâche, vérifie que `.loop/STATE.md` a bien été mis à jour.
-- Si Cline saute une phase → arrête-le et rappelle-lui la règle.
-- Pour les petites questions : utilise L1 ("Exécute en mode Loop Engineering strict (L1). Tâche : Analyse de...")
+- Le dossier que tu ouvres dans VS Code = `ProspectionCockpit`
+- `.clinerules/` est déjà à la racine
+- Tu n'as pas besoin de copier/coller les dossiers ailleurs
 
----
-
-## 7. Prochaines Actions Recommandées
-
-1. Configure Cline (section 2)
-2. Teste `docker compose up`
-3. Fais ta **première vraie boucle L2** avec l'exemple du section 4
-4. Lis `.loop/LOOP.md` en entier (une seule fois)
-
----
-
-**Tu es maintenant opérationnel.**
-Le système est conçu pour que même DeepSeek V4 Pro produise un travail de niveau Senior Principal Engineer à chaque itération.
-
-Si tu as la moindre question sur l'utilisation, pose-la en mode L1 et je t'aiderai.
+Si tu as un ancien projet local séparé, dis-le-moi et on verra comment migrer le système Loop dedans.
