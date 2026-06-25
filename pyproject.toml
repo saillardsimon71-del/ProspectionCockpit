@@ -1,0 +1,56 @@
+[project]
+name = "prospection-cockpit"
+version = "0.1.0"
+description = "Outil d’automatisation du funnel prospection→conversion pour artisans - Loop Engineering"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+authors = [{name = "Simon Saillard"}]
+
+keywords = ["prospection", "artisans", "automation", "llm", "fastapi", "nextjs", "rgpd"]
+
+[project.dependencies]
+fastapi = ">=0.115.0"
+uvicorn = {version = ">=0.30.0", extras = ["standard"]}
+sqlmodel = ">=0.0.22"
+pydantic = {version = ">=2.9.0", extras = ["email"]}
+celery = {version = ">=5.4.0", extras = ["redis"]}
+redis = ">=5.0.0"
+litellm = ">=1.52.0"
+python-dotenv = ">=1.0.0"
+structlog = ">=24.4.0"
+httpx = ">=0.27.0"
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "hypothesis>=6.112.0",
+    "pre-commit>=3.8.0",
+    "httpx>=0.27.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.uv]
+dev-dependencies = ["ruff", "mypy", "pytest", "pytest-asyncio", "hypothesis", "pre-commit"]
